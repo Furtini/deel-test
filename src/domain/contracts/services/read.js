@@ -1,4 +1,4 @@
-const { Contract } = require('../../../models')
+const { Contract, Op } = require('../../../models')
 
 let instance
 
@@ -10,7 +10,7 @@ class ReadService {
     instance = this
   }
 
-  async show(contractId, profile) {
+  async showById(contractId, profile) {
     const profileColumn = getProfileTypeColumn(profile)
 
     const query = {
@@ -27,6 +27,22 @@ class ReadService {
       throw new Error('Contract not found')
     }
 
+    return contract
+  }
+
+  async listActive(profile) {
+    const profileColumn = getProfileTypeColumn(profile)
+
+    const query = {
+      where: {
+        [Op.and]: [
+          { [profileColumn]: profile.id },
+          { [Op.or]: [{ ['status']: 'new' }, { ['status']: 'in_progress' }] }
+        ]
+      }
+    }
+
+    const contract = await Contract.findAll(query)
     return contract
   }
 }

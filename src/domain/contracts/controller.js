@@ -10,12 +10,25 @@ class ContractsController {
     instance = this
   }
 
-  async show(req, res) {
+  async showById(req, res) {
     try {
       const { id } = req.params
       const { profile } = req
 
-      const result = await ReadService.show(id, profile)
+      const result = await ReadService.showById(id, profile)
+
+      res.json(result)
+    } catch (err) {
+      // TODO: Erro handler
+      res.status(404).end()
+    }
+  }
+
+  async listActive(req, res) {
+    try {
+      const { profile } = req
+
+      const result = await ReadService.listActive(profile)
 
       res.json(result)
     } catch (err) {
