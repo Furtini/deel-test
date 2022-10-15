@@ -128,7 +128,7 @@ The project is organize as follows:
 4.  Encapsulate the express framework
 5.  Improve the queries, if possible (specially the admin ones).
 6.  Add typescript when possible
-7.  Add eslint
+7.  Add eslint, engine lock, husky, commit lint.
 8.  Break the model file into especific ones for each model.
 9.  Add more repo functions and completelly remove model requirement from domain folder.
 10. Add more query builder helper functions.
