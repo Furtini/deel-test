@@ -114,7 +114,7 @@ The project is organize as follows:
 
 I did not make all validations necessary, for lack of time. So I'm assuming we are passing the correct values and date types. Another improvment will be adding this type of validations.
 
-1.  Create testes with jest and maybe supertest (for http requests)
+1.  Create more testes (maybe adding supertest for http requests)
     1.  Add unity tests for some basic operations, like checking the 25% rule.
 2.  Create a error handler class to handle erros
 3.  Create specific error classes. Eg. NotFoundError, UnauthorizedError, etc
