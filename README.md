@@ -54,8 +54,9 @@ The project is organize as follows:
 
 - The database calls are under `infra/db` folder.
   - Each model have its corresponding repository, responsible for building and running the queries.
+  - It is still missing some basic queries.
 
-## APIs To Implement
+## APIs Implemented
 
 1. **_GET_** `/contracts/:id` - Return the contract based on the profile_id passed in the request header.
 
@@ -78,7 +79,7 @@ The project is organize as follows:
 5. **_POST_** `/balances/deposit/:userId` - Deposits money into the the the balance of a client. A client can't deposit more than 25% his total of jobs to pay. (at the deposit moment)
 
    1. Throws and error when trying to deposit mode then 25% of his total jobs to pay.
-   2. I'm assuming his jobs to pay includes new and in_progress jobs.
+   2. I'm assuming the client jobs to pay includes new and in_progress jobs.
 
 6. **_GET_** `/admin/best-profession?start=<date>&end=<date>` - Returns the profession that earned the most money (sum of jobs paid) for any contactor that worked in the query time range.
 
@@ -111,15 +112,17 @@ The project is organize as follows:
 
 ## Improvements
 
-1.  Create a error handler class to handle erros
-2.  Create specific error classes. Eg. NotFoundError, UnauthorizedError, etc
-3.  Encapsulate the express framework
-4.  Improve the queries, if possible (specially the admin ones).
-5.  Add typescript when possible
-6.  Add eslint
-7.  Add more tests
-8.  Break the model file into especific ones for each model.
-9.  Add more repo functions.
-10. Add more query builder helper functions.
+I did not make all validations necessary, for lack of time. So I'm assuming we are passing the correct values and date types. Another improvment will be adding this type of validations.
 
-It would be great for example if you'd write some unit test / simple frontend demostrating calls to your fresh APIs.
+1.  Create testes with jest and maybe supertest (for http requests)
+    1.  Add unity tests for some basic operations, like checking the 25% rule.
+2.  Create a error handler class to handle erros
+3.  Create specific error classes. Eg. NotFoundError, UnauthorizedError, etc
+4.  Encapsulate the express framework
+5.  Improve the queries, if possible (specially the admin ones).
+6.  Add typescript when possible
+7.  Add eslint
+8.  Break the model file into especific ones for each model.
+9.  Add more repo functions and completelly remove model requirement from domain folder.
+10. Add more query builder helper functions.
+11. Add route validations
