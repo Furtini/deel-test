@@ -19,7 +19,11 @@ class JobsController {
       res.json(result)
     } catch (err) {
       console.error(err)
-      res.status(404).end()
+      if (err.message.includes('not found')) {
+        res.status(404).send(err.message).end()
+      }
+
+      res.status(400).send(err.message).end()
     }
   }
 
@@ -34,7 +38,11 @@ class JobsController {
       res.json(result)
     } catch (err) {
       console.error(err)
-      res.status(404).end()
+      if (err.message.includes('not found')) {
+        res.status(404).send(err.message).end()
+      }
+
+      res.status(400).send(err.message).end()
     }
   }
 }
