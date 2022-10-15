@@ -33,7 +33,6 @@ class ContractsController {
 
       res.json(result)
     } catch (err) {
-      // TODO: Erro handler
       console.error(err)
       res.status(404).end()
     }
