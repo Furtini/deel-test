@@ -1,4 +1,4 @@
-const { Job, Contract, Profile } = require('../../../models')
+const { Job, Contract, Profile, sequelize } = require('../../../models')
 
 let instance
 
@@ -41,13 +41,27 @@ class CreateService {
     const newClientBalance = clientBalance - jobPrice
     const newContractorBalance = contractor.balance + jobPrice
 
-    // TODO: Add sequelize transaction
-    await Profile.update({ balance: newClientBalance }, { where: { id: client.id } })
-    await Profile.update({ balance: newContractorBalance }, { where: { id: contractor.id } })
-    await Job.update({ paid: true, paymentDate: new Date() }, { where: { id: job.id } })
+    const transaction = await sequelize.transaction()
+    try {
+      await Profile.update({ balance: newClientBalance }, { where: { id: client.id }, transaction })
+      await Profile.update(
+        { balance: newContractorBalance },
+        { where: { id: contractor.id }, transaction }
+      )
+      await Job.update(
+        { paid: true, paymentDate: new Date() },
+        { where: { id: job.id }, transaction }
+      )
 
-    const updatedJob = await Job.findByPk(job.id)
-    return updatedJob
+      await transaction.commit()
+
+      const updatedJob = await Job.findByPk(job.id)
+      return updatedJob
+    } catch (err) {
+      await transaction.rollback()
+
+      throw new Error('Error while paying job')
+    }
   }
 }
 
