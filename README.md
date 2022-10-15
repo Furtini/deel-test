@@ -110,9 +110,16 @@ The project is organize as follows:
 ]
 ```
 
-## Improvements
+## Notes and improvements
 
-I did not make all validations necessary, for lack of time. So I'm assuming we are passing the correct values and date types. Another improvment will be adding this type of validations.
+### Notes
+
+- I had some questions about the ruturn format on the validation for some of the routes. Comments are above on the route description.
+- The majority of tests where made using Postman for calling the api.
+- I had to update the sqlite3 package to be able to install it in node 16.
+- I did not make all validations necessary, for lack of time. So I'm assuming we are passing the correct values and date types. Another improvment will be adding this type of validations.
+
+### Improvements
 
 1.  Create more testes (maybe adding supertest for http requests)
     1.  Add unity tests for some basic operations, like checking the 25% rule.
