@@ -1,6 +1,8 @@
 const { Contract, Op } = require('../../../models')
 const { buildProfileFilter } = require('../../../helpers/queryBuilder')
 
+const ContractRepository = require('../../../infra/db/contracts')
+
 let instance
 
 class ReadService {
@@ -11,14 +13,12 @@ class ReadService {
     instance = this
   }
 
-  async showById(contractId, profile) {
+  async show(contractId, profile) {
     if (!contractId) {
       throw new Error('Contract not found')
     }
 
-    const query = buildShowByIdQuery(profile, contractId)
-
-    const contract = await Contract.findOne(query)
+    const contract = await ContractRepository.findById(contractId, profile)
 
     // TODO: Build error classes
     if (!contract) {
@@ -29,34 +29,8 @@ class ReadService {
   }
 
   async listActive(profile) {
-    const query = buildListActiveQuery(profile)
-
-    const contract = await Contract.findAll(query)
+    const contract = await ContractRepository.listActive(profile)
     return contract
-  }
-}
-
-const buildShowByIdQuery = (profile, id) => {
-  const profileFilter = buildProfileFilter(profile)
-
-  return {
-    where: {
-      ['id']: id,
-      ...profileFilter
-    }
-  }
-}
-
-const buildListActiveQuery = (profile) => {
-  const profileFilter = buildProfileFilter(profile)
-
-  return {
-    where: {
-      [Op.and]: [
-        { ...profileFilter },
-        { [Op.or]: [{ ['status']: 'new' }, { ['status']: 'in_progress' }] }
-      ]
-    }
   }
 }
 

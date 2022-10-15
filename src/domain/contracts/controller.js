@@ -10,12 +10,12 @@ class ContractsController {
     instance = this
   }
 
-  async showById(req, res) {
+  async show(req, res) {
     try {
       const { id } = req.params
       const { profile } = req
 
-      const result = await ReadService.showById(id, profile)
+      const result = await ReadService.show(id, profile)
 
       res.json(result)
     } catch (err) {
