@@ -1,4 +1,5 @@
-const { Job, Contract, Profile, Op } = require('../../../models')
+const JobRepository = require('../../../infra/db/jobs')
+const ProfileRepository = require('../../../infra/db/profiles')
 
 let instance
 
@@ -12,19 +13,11 @@ class CreateService {
 
   // TODO: improve validations
   async makeDeposit(clientId, amount) {
-    const query = {
-      include: {
-        model: Contract,
-        where: {
-          [Op.and]: [
-            { ['ClientId']: clientId },
-            { [Op.or]: [{ ['status']: 'new' }, { ['status']: 'in_progress' }] }
-          ]
-        }
-      }
+    const unpaidJobs = await JobRepository.listUnpaid()
+    if (!unpaidJobs) {
+      throw new Error('No active jobs found')
     }
 
-    const unpaidJobs = await Job.findAll(query)
     const totalToPay = unpaidJobs.reduce((sum, job) => (sum += job.price), 0)
 
     // no more then 25% of unpaid jobs
@@ -34,15 +27,17 @@ class CreateService {
       throw new Error('invalid amount to deposit')
     }
 
-    const client = await Profile.findByPk(clientId)
+    const client = await ProfileRepository.findById(clientId)
     if (!client) {
       throw new Error('Client not found')
     }
+
     const currentBalance = client.balance
     const newBalance = currentBalance + amount
 
-    await Profile.update({ balance: newBalance }, { where: { id: client.id } })
-    const updatedClient = await Profile.findByPk(clientId)
+    const attributes = { balance: newBalance }
+    await ProfileRepository.updateOneById(client.id, attributes)
+    const updatedClient = await ProfileRepository.findById(clientId)
     return updatedClient
   }
 }

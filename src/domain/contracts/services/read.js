@@ -1,6 +1,3 @@
-const { Contract, Op } = require('../../../models')
-const { buildProfileFilter } = require('../../../helpers/queryBuilder')
-
 const ContractRepository = require('../../../infra/db/contracts')
 
 let instance

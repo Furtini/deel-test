@@ -1,5 +1,5 @@
 const { Contract, Op } = require('../../models')
-const { buildProfileFilter } = require('../../helpers/queryBuilder')
+const { buildProfileFilter } = require('./helpers/queryBuilder')
 
 let instance
 

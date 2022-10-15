@@ -1,5 +1,5 @@
-const { Contract, Job, Op } = require('../../models')
-const { buildProfileFilter } = require('../../helpers/queryBuilder')
+const { Contract, Job, Profile, Op } = require('../../models')
+const { buildProfileFilter } = require('./helpers/queryBuilder')
 
 let instance
 
@@ -20,7 +20,7 @@ class JobRepository {
       include: {
         model: Contract,
         where: {
-          [Op.and]: [{ [Op.or]: [{ ['status']: 'new' }, { ['status']: 'in_progress' }] }]
+          [Op.and]: [{ ['status']: 'in_progress' }]
         }
       }
     }
@@ -32,6 +32,41 @@ class JobRepository {
 
     const results = await Job.findAll(query)
     return results
+  }
+
+  /**
+   * @param {Date} start
+   * @param {Date} end
+   * @param {'contractors' | 'clients'} profile
+   * @returns
+   */
+  async listPaidBeetweenDates(start, end, profile) {
+    const query = {
+      where: {
+        paid: true,
+        paymentDate: {
+          [Op.gt]: new Date(start).toUTCString(),
+          [Op.lt]: new Date(end).toUTCString()
+        }
+      }
+    }
+
+    if (profile === 'contractors') {
+      query.include = {
+        model: Contract,
+        include: { model: Profile, as: 'Contractor' }
+      }
+    }
+
+    if (profile === 'clients') {
+      query.include = {
+        model: Contract,
+        include: { model: Profile, as: 'Client' }
+      }
+    }
+
+    const jobs = await Job.findAll(query)
+    return jobs
   }
 }
 
