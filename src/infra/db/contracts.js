@@ -28,7 +28,7 @@ class ContractRepository {
     return result
   }
 
-  async listActive(profile) {
+  async listNonTerminated(profile) {
     const query = {
       where: {
         [Op.and]: [{ [Op.or]: [{ ['status']: 'new' }, { ['status']: 'in_progress' }] }]

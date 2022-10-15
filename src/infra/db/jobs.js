@@ -20,7 +20,7 @@ class JobRepository {
       include: {
         model: Contract,
         where: {
-          [Op.and]: [{ ['status']: 'in_progress' }]
+          [Op.and]: [{ ['status']: 'in_progress' }] // active contracts
         }
       }
     }
