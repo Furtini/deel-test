@@ -1,6 +1,4 @@
-const { Op } = require('sequelize')
-
-const { Contract } = require('../../models')
+const { Contract, Op } = require('../../models')
 const { buildProfileFilter } = require('../../helpers/queryBuilder')
 
 let instance

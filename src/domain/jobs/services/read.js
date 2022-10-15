@@ -1,5 +1,4 @@
-const { Job, Contract, Op } = require('../../../models')
-const { buildProfileFilter } = require('../../../helpers/queryBuilder')
+const JobRepository = require('../../../infra/db/jobs')
 
 let instance
 
@@ -12,21 +11,7 @@ class ReadService {
   }
 
   async listUnpaid(profile) {
-    const profileFilter = buildProfileFilter(profile)
-
-    const query = {
-      include: {
-        model: Contract,
-        where: {
-          [Op.and]: [
-            { ...profileFilter },
-            { [Op.or]: [{ ['status']: 'new' }, { ['status']: 'in_progress' }] }
-          ]
-        }
-      }
-    }
-
-    const jobs = await Job.findAll(query)
+    const jobs = await JobRepository.listUnpaid(profile)
     return jobs
   }
 }

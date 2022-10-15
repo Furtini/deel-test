@@ -14,7 +14,6 @@ class JobsController {
   async listUnpaid(req, res) {
     try {
       const { profile } = req
-
       const result = await ReadService.listUnpaid(profile)
 
       res.json(result)
