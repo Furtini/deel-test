@@ -1,0 +1,3 @@
+jobs/pay
+- should I set the payment date to now() or receive as parameter?
+- do I allow a different user to pay a job for another user?

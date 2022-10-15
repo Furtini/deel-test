@@ -1,5 +1,4 @@
 const { Job, Contract, Profile } = require('../../../models')
-const { buildProfileFilter } = require('../../../helpers/queryBuilder')
 
 let instance
 
@@ -45,7 +44,7 @@ class CreateService {
     // TODO: Add sequelize transaction
     await Profile.update({ balance: newClientBalance }, { where: { id: client.id } })
     await Profile.update({ balance: newContractorBalance }, { where: { id: contractor.id } })
-    await Job.update({ paid: true }, { where: { id: job.id } })
+    await Job.update({ paid: true, paymentDate: new Date() }, { where: { id: job.id } })
 
     const updatedJob = await Job.findByPk(job.id)
     return updatedJob
